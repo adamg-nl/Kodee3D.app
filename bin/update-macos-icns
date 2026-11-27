@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." &> /dev/null && pwd)"
+set -x
 cd "${PROJECT_ROOT}"
 
 source="assets/images/icons/icon-512.png"

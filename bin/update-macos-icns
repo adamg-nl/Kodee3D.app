@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." &> /dev/null && pwd)"
+cd "${PROJECT_ROOT}"
+
+source="assets/images/icons/icon-512.png"
+iconset="assets/images/icons/icon.iconset"
+mkdir -p "${iconset}"
+for size in 16 32 128 256 512; do
+  sips -Z ${size} "${source}" -o "${iconset}/icon_${size}x${size}.png"
+  sips -Z $((size*2)) "${source}" -o "${iconset}/icon_${size}x${size}@2x.png"
+done >/dev/null
+iconutil -c icns "${iconset}"
+rm -r "${iconset}"

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<style>
+    .background {
+        width: 98vw;
+        height: 98vw;
+        position: relative;
+        left: calc(-22vw / 2);
+        top: calc(-56vw / 2);
+
+        /* 1 SVG user unit in CSS px; shadow lengths below are in SVG units */
+        --u: calc(98vw / 512);
+        --dx: -2;
+        --dy: 3;
+        /* tight contact shadow: blur (std dev) and opacity */
+        --b1: 3;
+        --a1: .6;
+        /* wide ambient shadow: blur (std dev) and opacity */
+        --b2: 16;
+        --a2: .9;
+    }
+
+    .background>svg {
+        position: absolute;
+        left: calc(var(--x) * 100% / 512);
+        top: calc(var(--y) * 100% / 512);
+        width: calc(var(--w) * 100% / 512);
+        height: calc(var(--h) * 100% / 512);
+        transform-origin: calc((250.7 - var(--x)) * 100% / var(--w)) calc((391.8 - var(--y)) * 100% / var(--h));
+        /* --k (per square, 0..1): small squares get a faint tight shadow, big ones a strong wide one */
+        filter:
+            drop-shadow(calc(var(--dx) * var(--u)) calc(var(--dy) * var(--u)) calc(var(--b1) * var(--u)) rgb(0 0 0 / calc(var(--a1) * min(1, 2 * var(--k) * (1 - var(--k))))))
+            drop-shadow(calc(var(--dx) * var(--u)) calc(var(--dy) * var(--u)) calc(var(--b2) * var(--u)) rgb(0 0 0 / calc(var(--a2) * min(1, 2 * var(--k) * var(--k)))));
+        animation: a 2s calc(var(--i) * .15s) cubic-bezier(.25, .6, .35, 1) backwards;
+    }
+
+    .background>svg>g>g { filter: url(#h) }
+    .background>svg>g>g>g { filter: url(#n) }
+
+    /* Chromium: CSS drop-shadow blinks there on large animated layers, so use the SVG-filter shadow instead */
+    .c .background>svg { filter: none }
+    .c .background>svg>g { filter: url(#f) }
+
+    @keyframes a {
+        from {
+            opacity: 0;
+            transform: scale(.5);
+        }
+    }
+
+    :root, body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+
+    body {
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<script>if (window.chrome) document.documentElement.className = "c"</script>
+
+<svg width="0" height="0" style="position:absolute">
+    <filter id="f" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="60" result="k"/>
+        <feGaussianBlur in="SourceAlpha" stdDeviation="20"/>
+        <feComposite in2="k" operator="arithmetic" k1="2" result="l"/>
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+        <feComposite in2="k" operator="arithmetic" k1="-2" k2="1"/>
+        <feComposite in2="l" operator="arithmetic" k2="1" k3="1"/>
+        <feOffset dx="-2" dy="3"/>
+        <feComposite in2="k" operator="arithmetic" k1="4" result="b"/>
+        <feFlood flood-opacity=".6"/>
+        <feComposite in2="b" operator="in"/>
+        <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="h">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="0.8"/>
+        <feSpecularLighting surfaceScale="4" specularConstant=".7" specularExponent="25" lighting-color="#dcd0ff"><feDistantLight azimuth="-45" elevation="20"/></feSpecularLighting>
+        <feComposite in2="SourceAlpha" operator="in"/>
+        <feComposite in2="SourceGraphic" operator="arithmetic" k2="1" k3="1"/>
+    </filter>
+    <filter id="n">
+        <feTurbulence type="fractalNoise" baseFrequency=".9"/>
+        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 20 -13.5" result="d"/>
+        <feFlood flood-color="#fff" flood-opacity=".15"/>
+        <feComposite in2="d" operator="in"/>
+        <feComposite in2="SourceGraphic" operator="atop"/>
+    </filter>
+    <rect id="r" x="-.604" y="-1.024" width="1" height="1" rx=".188"/>
+</svg>
+<div class="background">
+    <svg style="--i:14;--k:1;--x:0;--y:0;--w:470;--h:442" viewBox="0 0 470 442"><g><g><use href="#r" fill="#261e3e" transform="translate(250.7 391.8)rotate(4.6)scale(369.9)"/></g></g></svg>
+    <svg style="--i:13;--k:.99;--x:49;--y:0;--w:463;--h:464" viewBox="0 0 463 464"><g><g><g><use href="#r" fill="#281378" transform="translate(201.7 391.8)rotate(23.2)scale(315.8)"/></g></g></g></svg>
+    <svg style="--i:12;--k:.98;--x:108;--y:56;--w:404;--h:429" viewBox="0 0 404 429"><g><g><use href="#r" fill="#1d0093" transform="translate(142.7 335.8)rotate(41.8)scale(269.6)"/></g></g></svg>
+    <svg style="--i:11;--k:.94;--x:156;--y:128;--w:356;--h:371" viewBox="0 0 356 371"><g><g><use href="#r" fill="#1a0091" transform="translate(94.7 263.8)rotate(60.4)scale(230.2)"/></g></g></svg>
+    <svg style="--i:10;--k:.9;--x:191;--y:199;--w:310;--h:310" viewBox="0 0 310 310"><g><g><g><use href="#r" fill="#3705d0" transform="translate(59.7 192.8)rotate(78.9)scale(196.6)"/></g></g></g></svg>
+    <svg style="--i:9;--k:.83;--x:202;--y:252;--w:273;--h:260" viewBox="0 0 273 260"><g><g><use href="#r" fill="#7000ea" transform="translate(48.7 139.8)rotate(97.5)scale(167.8)"/></g></g></svg>
+    <svg style="--i:8;--k:.75;--x:194;--y:285;--w:258;--h:227" viewBox="0 0 258 227"><g><g><use href="#r" fill="#6a00e6" transform="translate(56.7 106.8)rotate(116.1)scale(143.3)"/></g></g></svg>
+    <svg style="--i:7;--k:.66;--x:186;--y:313;--w:235;--h:199" viewBox="0 0 235 199"><g><g><g><use href="#r" fill="#b301ef" transform="translate(64.7 78.8)rotate(134.7)scale(122.4)"/></g></g></g></svg>
+    <svg style="--i:6;--k:.57;--x:180;--y:335;--w:206;--h:177" viewBox="0 0 206 177"><g><g><use href="#r" fill="#d600e5" transform="translate(70.7 56.8)rotate(153.2)scale(104.5)"/></g></g></svg>
+    <svg style="--i:5;--k:.47;--x:176;--y:350;--w:178;--h:162" viewBox="0 0 178 162"><g><g><use href="#r" fill="#d100dd" transform="translate(74.7 41.8)rotate(171.8)scale(89.2)"/></g></g></svg>
+    <svg style="--i:4;--k:.38;--x:170;--y:356;--w:159;--h:156" viewBox="0 0 159 156"><g><g><g><use href="#r" fill="#ea2f3a" transform="translate(80.7 35.8)rotate(190.4)scale(76.2)"/></g></g></g></svg>
+    <svg style="--i:3;--k:.3;--x:167;--y:356;--w:142;--h:143" viewBox="0 0 142 143"><g><g><use href="#r" fill="#d8380f" transform="translate(83.7 35.8)rotate(209)scale(65)"/></g></g></svg>
+    <svg style="--i:2;--k:.23;--x:170;--y:357;--w:123;--h:123" viewBox="0 0 123 123"><g><g><use href="#r" fill="#d5340e" transform="translate(80.7 34.8)rotate(227.5)scale(55.5)"/></g></g></svg>
+    <svg style="--i:1;--k:.18;--x:178;--y:358;--w:101;--h:102" viewBox="0 0 101 102"><g><g><g><use href="#r" fill="#d33310" transform="translate(72.7 33.8)rotate(246.1)scale(47.4)"/></g></g></g></svg>
+    <svg style="--i:0;--k:.13;--x:188;--y:359;--w:79;--h:79" viewBox="0 0 79 79"><g><g><use href="#r" fill="#ec4413" transform="translate(62.7 32.8)rotate(270)scale(40.5)"/></g></g></svg>
+</div>
